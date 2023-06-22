@@ -29,8 +29,6 @@ export function LoginForm() {
           type: "success",
           position: "bottom",
           text1: "Usuario logeado correctamente",
-          backgroundColor: "#00FF00", // Cambia el color de fondo del Toast
-          textColor: "#FFFFFF", // Cambia el color del texto del Toast
         });
         // navigation.setOptions({ response });
         // navigation.navigate(screen.auth.app);

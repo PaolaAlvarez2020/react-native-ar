@@ -1,52 +1,41 @@
-import { LogBox } from "react-native";
-import { AuthProvider } from "./src/context";
-import { NavigationContainer } from "@react-navigation/native";
-import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
-import { AuthNavigation } from "./src/navigation/AuthNavigation";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useCallback } from "react";
 import "react-native-get-random-values";
 import "react-native-gesture-handler";
-import { PRIMARY_DARK } from "./src/styles/colors";
+import { AuthProvider } from "./src/context";
+import { AuthNavigation } from "./src/navigation/AuthNavigation";
+import { NavigationContainer } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { LogBox, View, Text } from "react-native";
+import { toastConfig } from "./src/utils";
+import { FONT_NAMES } from "./src/styles/fonts";
 
 LogBox.ignoreAllLogs();
-
-const toastConfig = {
-  success: (props) => (
-    <BaseToast
-      {...props}
-      style={{ borderLeftColor: PRIMARY_DARK }}
-      contentContainerStyle={{ paddingHorizontal: 15 }}
-      text1Style={{
-        fontSize: 15,
-        fontWeight: "400",
-      }}
-    />
-  ),
-  error: (props) => (
-    <ErrorToast
-      {...props}
-      text1Style={{
-        fontSize: 17,
-      }}
-      text2Style={{
-        fontSize: 15,
-      }}
-    />
-  ),
-
-  tomatoToast: ({ text1, props }) => (
-    <View style={{ height: 60, width: "100%", backgroundColor: "tomato" }}>
-      <Text>{text1}</Text>
-      <Text>{props.uuid}</Text>
-    </View>
-  ),
-};
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [fontsLoaded] = useFonts(FONT_NAMES);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <AuthProvider>
       <NavigationContainer>
-        <AuthNavigation />
+        <View
+          style={{ width: "100%", height: "100%" }}
+          onLayout={onLayoutRootView}
+        >
+          <AuthNavigation />
+        </View>
       </NavigationContainer>
       <Toast config={toastConfig} />
     </AuthProvider>

@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Dimensions } from "react-native";
+import Carousel from "react-native-reanimated-carousel";
 import { Text, Button } from "@rneui/themed";
 import { useAuth } from "../../../hooks";
 import { styles } from "./Account.styles";
 import { screen } from "../../../utils";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  PRIMARY,
-  PRIMARY_DARK,
-  WHITE,
-  WHITE_GRAY,
-} from "../../../styles/colors";
-import { isEmpty, isUndefined } from "lodash";
+import { BLACK, WHITE, WHITE_GRAY } from "../../../styles/colors";
+import { isUndefined } from "lodash";
 
 export function Account(props) {
   const { me } = useAuth().auth;
+  const width = Dimensions.get("window").width;
   const navigation = useNavigation();
   const goToConsultations = (patient, person) => {
     const namePerson = `${person.nombre} ${person.apellido_paterno} ${person.apellido_materno}`;
@@ -34,14 +31,14 @@ export function Account(props) {
       />
       <View style={styles.mainContent}>
         <View style={styles.userInfo}>
-          <Text h4 style={styles.title}>
-            Bienvenido de vuelta
-          </Text>
-          {!isUndefined(me?.username) && (
-            <Text h5 style={styles.description}>
-              {me?.username}
-            </Text>
-          )}
+          <Text style={styles.title}>Bienvenido de vuelta,</Text>
+          {!isUndefined(me?.persona_data?.nombre) &&
+            !isUndefined(me?.persona_data?.apellido_paterno) && (
+              <Text style={styles.description}>
+                {me.persona_data.genero === "FEMALE" ? "Dra." : "Dr."}{" "}
+                {me.persona_data.apellido_paterno} {me.persona_data.nombre}
+              </Text>
+            )}
           {/* <View style={styles.contentInfo}>
             <Text style={styles.titleDisplayInfo}>Nombre de usuario</Text>
             <Text style={styles.displayInfo}>{me.username || "Anónimo"}</Text>
@@ -73,7 +70,34 @@ export function Account(props) {
             onPress={() => goToConsultations(null, me.persona_data)}
           /> */}
         </View>
+        <View style={styles.contentCarousel}>
+          <Carousel
+            loop
+            width={width - 80}
+            height={width / 2}
+            data={[<Text>Pacientes</Text>]}
+            scrollAnimationDuration={1500}
+            renderItem={({ index, item }) => (
+              <ItemCarousel index={index} item={item} />
+            )}
+          />
+        </View>
       </View>
     </ScrollView>
+  );
+}
+
+function ItemCarousel(props) {
+  const { item, index } = props;
+  return (
+    <View
+      style={{
+        flex: 1,
+        borderWidth: 1,
+        justifyContent: "center",
+      }}
+    >
+      <Text style={{ textAlign: "center", fontSize: 50 }}>{item}</Text>
+    </View>
   );
 }

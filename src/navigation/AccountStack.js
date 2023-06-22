@@ -15,7 +15,7 @@ export function AccountStack() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name={screen.account.account} component={AccountScreen} />
+      <Stack.Screen name={screen.account.home} component={AccountScreen} />
       <Stack.Screen
         name={screen.consultation.myConsultations}
         component={MyConsultationsScreen}

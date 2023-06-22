@@ -94,6 +94,8 @@ function iconOptions(route, focused, color, size) {
     iconName = focused ? "heart" : "heart-outline";
   } else if (route.name === screen.ar.drawer) {
     iconName = focused ? "cube-scan" : "cube-outline";
+  } else if (route.name === screen.home.drawer) {
+    iconName = focused ? "home-account" : "home-outline";
   }
 
   return (

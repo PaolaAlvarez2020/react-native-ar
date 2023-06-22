@@ -8,7 +8,7 @@ const accountStack = {
   tab: "AccountTab",
   drawer: "AccountDrawer",
   title: "Cuenta",
-  account: "Account",
+  home: "Home",
   login: "Login",
   register: "Register",
 };
