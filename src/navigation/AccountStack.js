@@ -4,6 +4,7 @@ import {
   MyConsultationsScreen,
   MyConsultationScreen,
 } from "../screens/Account";
+import { ConsultScreen, ConsultationsScreen } from "../screens/Consultations";
 import { screen } from "../utils";
 
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,14 @@ export function AccountStack() {
       <Stack.Screen
         name={screen.consultation.myConsultation}
         component={MyConsultationScreen}
+      />
+      <Stack.Screen
+        name={screen.consultation.consult}
+        component={ConsultScreen}
+      />
+      <Stack.Screen
+        name={screen.consultation.consultations}
+        component={ConsultationsScreen}
       />
     </Stack.Navigator>
   );

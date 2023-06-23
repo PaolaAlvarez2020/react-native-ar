@@ -16,6 +16,8 @@ const accountStack = {
 const consultationStack = {
   drawer: "ConsultationDrawer",
   myTitle: "Mis Consultas",
+  consult: "Consult",
+  consultations: "Consultations",
   myConsultations: "myConsultations",
   myConsultation: "myConsultation",
 };

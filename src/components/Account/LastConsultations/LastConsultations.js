@@ -2,18 +2,23 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "@rneui/themed";
 import { styles } from "./LastConsultations.styles";
-import { Avatar, Icon } from "@rneui/base";
+import { Avatar } from "@rneui/base";
 import { PRIMARY_EXTRA_LIGHT, ROSE } from "../../../styles/colors";
 import { ScrollView } from "react-native-gesture-handler";
 import { isNull, map, reverse, sortBy } from "lodash";
+import { screen } from "../../../utils";
+import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 
 export const LastConsultations = (props) => {
   const { consultations } = props;
+  const navigation = useNavigation();
   const data = reverse(
     sortBy(
       map(consultations, (consultation) => {
         return {
+          id: consultation.id,
+          idUser: consultation.paciente_data.usuario_data.id,
           last_date: dayjs(consultation.fecha)
             .locale("es-MX")
             .format("hh:mm dddd-MM-YY"),
@@ -32,6 +37,12 @@ export const LastConsultations = (props) => {
     ),
     "last_date"
   );
+  const goToConsultation = (idConsultation, idUser) => {
+    navigation.navigate(screen.consultation.consult, {
+      idConsultation,
+      idUser,
+    });
+  };
   return (
     <View>
       <Text style={styles.title}>Últimas consultas</Text>
@@ -45,7 +56,9 @@ export const LastConsultations = (props) => {
                   consultation.genre === "FEMALE" ? ROSE : PRIMARY_EXTRA_LIGHT,
                 ...styles.itemConsultation,
               }}
-              onTouchEnd={() => console.log("TEST 2")}
+              onTouchEnd={() =>
+                goToConsultation(consultation.id, consultation.idUser)
+              }
             >
               <Avatar
                 size={100}

@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useConsultation } from "../../../hooks";
 import { screen } from "../../../utils";
 import { styles } from "./MyConsultationScreen.styles";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 export function MyConsultationScreen(props) {
   const { route } = props;
@@ -14,9 +15,13 @@ export function MyConsultationScreen(props) {
   const { consultation, getConsultation } = useConsultation();
 
   useEffect(() => {
-    (async () => {
-      await getConsultation(params.id);
-    })();
+    getConsultation(params.id).catch(() =>
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Hubo un error al obtener la informaciòn de la consulta",
+      })
+    );
   }, []);
 
   if (!consultation)
@@ -64,7 +69,7 @@ export function MyConsultationScreen(props) {
           <View style={styles.contentInfo}>
             <Text style={styles.titleDisplayInfo}>Diagnóstico</Text>
             <Text style={styles.displayInfo}>
-              {consultation.enfermedad_data.nombre}
+              {consultation?.enfermedad_data?.nombre}
             </Text>
           </View>
         </View>

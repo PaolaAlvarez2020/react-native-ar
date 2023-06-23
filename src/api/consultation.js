@@ -46,6 +46,21 @@ export async function getConsultationsByPatientApi(idPatient) {
   }
 }
 
+export async function getConsultationsByUserApi(idUser) {
+  try {
+    const url = `${ENV.BASE_API}/${ENV.API_ROUTES.CONSULTATIONS}/?paciente__usuario__id=${idUser}`;
+    const params = {
+      method: "GET",
+    };
+
+    const response = await fetch(url, params);
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getConsultationApi(id) {
   try {
     const url = `${ENV.BASE_API}/${ENV.API_ROUTES.CONSULTATIONS}/${id}`;

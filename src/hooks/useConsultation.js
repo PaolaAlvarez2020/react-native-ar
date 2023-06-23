@@ -6,14 +6,15 @@ import {
   addConsultationApi,
   updateImageConsultationApi,
   searchConsultationsByUserApi,
+  getConsultationsByUserApi,
 } from "../api/";
 import { useAuth } from "./useAuth";
 
 export function useConsultation() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [consultations, setConsultations] = useState(null);
-  const [consultation, setConsultation] = useState(null);
+  const [consultations, setConsultations] = useState([]);
+  const [consultation, setConsultation] = useState(undefined);
   const { auth } = useAuth();
 
   const getConsultations = async () => {
@@ -24,8 +25,8 @@ export function useConsultation() {
 
       setConsultations(response);
     } catch (err) {
-      setError(err);
       setLoading(false);
+      throw err;
     }
   };
 
@@ -37,8 +38,8 @@ export function useConsultation() {
 
       setConsultation(response);
     } catch (err) {
-      setError(err);
       setLoading(false);
+      throw err;
     }
   };
 
@@ -50,8 +51,8 @@ export function useConsultation() {
 
       setConsultations(response);
     } catch (err) {
-      setError(err);
       setLoading(false);
+      throw err;
     }
   };
 
@@ -63,8 +64,21 @@ export function useConsultation() {
 
       setConsultations(response);
     } catch (err) {
-      setError(err);
       setLoading(false);
+      throw err;
+    }
+  };
+
+  const getConsultationsByUser = async (idUser) => {
+    try {
+      setLoading(true);
+      const response = await getConsultationsByUserApi(idUser);
+      setLoading(false);
+
+      setConsultations(response);
+    } catch (err) {
+      setLoading(false);
+      throw err;
     }
   };
 
@@ -76,7 +90,7 @@ export function useConsultation() {
       return response;
     } catch (err) {
       setLoading(false);
-      setError(err);
+      throw err;
     }
   };
 
@@ -88,7 +102,7 @@ export function useConsultation() {
       return response;
     } catch (err) {
       setLoading(false);
-      setError(err);
+      throw err;
     }
   };
 
@@ -98,6 +112,7 @@ export function useConsultation() {
     getConsultationsByPatient,
     updateImageConsultation,
     searchConsultationsByUser,
+    getConsultationsByUser,
     addConsultation,
     loading,
     error,
