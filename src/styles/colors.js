@@ -10,3 +10,6 @@ export const WHITE = "#fafafa";
 export const BLACK = "#0a0a0a";
 export const ROSE = "#f9dcf9";
 export const INFO_YELLOW = "#fdfbd3";
+export const YELLOW = "#FFC107";
+export const GREEN = "#00A84C";
+export const RED = "#EB0100";

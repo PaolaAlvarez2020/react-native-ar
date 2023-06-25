@@ -11,6 +11,7 @@ import {
   LastConsultations,
   UserInfo,
 } from "../../../components/Account";
+import { Loader } from "../../../components/Common";
 
 export function AccountScreen() {
   const { me } = useAuth().auth;
@@ -24,15 +25,6 @@ export function AccountScreen() {
       })
     );
   }, []);
-
-  const navigation = useNavigation();
-  const goToConsultations = (patient, person) => {
-    const namePerson = `${person.nombre} ${person.apellido_paterno} ${person.apellido_materno}`;
-    navigation.navigate(screen.consultation.myConsultations, {
-      id: patient?.id,
-      name: namePerson,
-    });
-  };
   return (
     <ScrollView>
       <LinearGradient
@@ -45,11 +37,7 @@ export function AccountScreen() {
         <UserInfo me={me} />
         <AccessOptions />
         {loading ? (
-          <ActivityIndicator
-            style={styles.loader}
-            size={64}
-            color={PRIMARY_DARK}
-          />
+          <Loader />
         ) : (
           <LastConsultations consultations={consultations} />
         )}

@@ -5,7 +5,7 @@ import { screen } from "../../../utils";
 import { styles } from "./ListConsultations.styles";
 import { Image, Text } from "@rneui/themed";
 import dayjs from "dayjs";
-import { size } from "lodash";
+import { isNull, size } from "lodash";
 
 export function ListConsultations(props) {
   const { consultations } = props;
@@ -33,7 +33,7 @@ export function ListConsultations(props) {
             <View style={styles.contentConsultation}>
               <Image
                 source={
-                  consultation?.foto
+                  !isNull(consultation?.foto)
                     ? { uri: consultation.foto }
                     : require("../../../../assets/img/consulta.png")
                 }

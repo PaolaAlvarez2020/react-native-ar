@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Text } from "@rneui/themed";
 import { styles } from "./LastConsultations.styles";
 import { Avatar } from "@rneui/base";
@@ -32,15 +32,16 @@ export const LastConsultations = (props) => {
               .apellido_materno,
           genre: consultation.paciente_data.usuario_data.persona_data.genero,
           photo: consultation.paciente_data.usuario_data.persona_data.foto,
+          nameUser: `${consultation.paciente_data.usuario_data.persona_data.nombre} ${consultation.paciente_data.usuario_data.persona_data.apellido_paterno} ${consultation.paciente_data.usuario_data.persona_data.apellido_materno}`,
         };
       })
     ),
     "last_date"
   );
-  const goToConsultation = (idConsultation, idUser) => {
-    navigation.navigate(screen.consultation.consult, {
-      idConsultation,
-      idUser,
+  const goToConsultation = (idConsultation, idUser, nameUser) => {
+    navigation.navigate(screen.consultation.drawer, {
+      screen: screen.consultation.consult,
+      params: { idConsultation, idUser, nameUser },
     });
   };
   return (
@@ -49,15 +50,19 @@ export const LastConsultations = (props) => {
       <ScrollView horizontal>
         <View style={styles.contentScrollView}>
           {map(data, (consultation, index) => (
-            <View
+            <TouchableOpacity
               key={index}
               style={{
                 backgroundColor:
                   consultation.genre === "FEMALE" ? ROSE : PRIMARY_EXTRA_LIGHT,
                 ...styles.itemConsultation,
               }}
-              onTouchEnd={() =>
-                goToConsultation(consultation.id, consultation.idUser)
+              onPress={() =>
+                goToConsultation(
+                  consultation.id,
+                  consultation.idUser,
+                  consultation.nameUser
+                )
               }
             >
               <Avatar
@@ -75,7 +80,7 @@ export const LastConsultations = (props) => {
                 {consultation.mother_last_name}
               </Text>
               <Text style={styles.extra}>{consultation.ci}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>

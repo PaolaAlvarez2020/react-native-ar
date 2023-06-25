@@ -24,6 +24,7 @@ export function InfoConsultationForm(props) {
           label="Descripción de la consulta"
           multiline={true}
           keyboardType="default"
+          labelStyle={styles.label}
           inputContainerStyle={styles.textArea}
           defaultValue={formik.values.descripcion}
           onChangeText={(text) => formik.setFieldValue("descripcion", text)}

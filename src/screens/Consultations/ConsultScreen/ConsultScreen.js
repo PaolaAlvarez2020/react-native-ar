@@ -32,15 +32,20 @@ export function ConsultScreen(props) {
     });
   };
 
-  const goToConsultations = (idUser) => {
+  const goToConsultations = (idUser, nameUser, patient) => {
     navigation.navigate(screen.consultation.consultations, {
       idUser,
+      nameUser,
+      patient,
     });
   };
 
   if (!consultation) return <Loader />;
 
   if (!consultation.paciente_data) return <Loader />;
+
+  const nameUser = `${consultation.paciente_data.usuario_data.persona_data.apellido_paterno} ${consultation.paciente_data.usuario_data.persona_data.nombre}`;
+  const patient = consultation.paciente_data;
 
   return (
     <ScrollView>
@@ -78,9 +83,9 @@ export function ConsultScreen(props) {
       <View style={styles.actions}>
         {me.is_staff && (
           <Button
-            title="Mas consultas"
+            title={`Mas consultas de ${nameUser}`}
             buttonStyle={styles.btnConsultation}
-            onPress={() => goToConsultations(params.idUser)}
+            onPress={() => goToConsultations(params.idUser, nameUser, patient)}
           />
         )}
         <Button

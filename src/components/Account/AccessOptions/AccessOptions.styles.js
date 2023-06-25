@@ -38,6 +38,7 @@ export const styles = StyleSheet.create({
     borderBottomEndRadius: 150,
   },
   nameItem: {
+    textAlign: "center",
     marginTop: 10,
     fontFamily: "Poppins-Regular",
     fontSize: 18,

@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/drawer";
 import { AccountStack } from "./AccountStack";
 import { PatientStack } from "./PatientStack";
+import { ConsultationStack } from "./ConsultationStack";
 import { ARStack } from "./ARStack";
 import { screen } from "../utils";
 import { useAuth } from "../hooks";
@@ -76,6 +77,13 @@ export function DrawerNavigation() {
           options={{ title: screen.patient.title }}
         />
       )}
+      {auth.me.is_staff && (
+        <Drawer.Screen
+          name={screen.consultation.drawer}
+          component={ConsultationStack}
+          options={{ title: screen.consultation.title }}
+        />
+      )}
       <Drawer.Screen
         name={screen.ar.drawer}
         component={ARStack}
@@ -94,8 +102,8 @@ function iconOptions(route, focused, color, size) {
     iconName = focused ? "heart" : "heart-outline";
   } else if (route.name === screen.ar.drawer) {
     iconName = focused ? "cube-scan" : "cube-outline";
-  } else if (route.name === screen.home.drawer) {
-    iconName = focused ? "home-account" : "home-outline";
+  } else if (route.name === screen.consultation.drawer) {
+    iconName = focused ? "folder-open" : "folder-account-outline";
   }
 
   return (

@@ -1,35 +1,33 @@
 import { StyleSheet } from "react-native";
+import { GRAY, RED } from "../../../../styles/colors";
 
 export const styles = StyleSheet.create({
-  content: {
-    marginHorizontal: 10,
+  content: {},
+  label: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 12,
+    color: GRAY,
+    marginBottom: 10,
   },
   created_at: {
+    fontFamily: "Poppins-Bold",
     textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
     marginBottom: 20,
   },
   textArea: {
-    height: 100,
+    fontFamily: "Poppins-Bold",
     width: "100%",
-    padding: 0,
-    margin: 0,
   },
   placeholderStyle: {
     fontSize: 16,
   },
   error: {
+    fontSize: 12,
+    fontFamily: "Poppins-Bold",
     marginHorizontal: 20,
     marginTop: 10,
-    color: "#ff0000",
-    fontSize: 12,
     paddingLeft: 6,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#8E8E8E",
-    marginBottom: 10,
+    color: RED,
   },
 });

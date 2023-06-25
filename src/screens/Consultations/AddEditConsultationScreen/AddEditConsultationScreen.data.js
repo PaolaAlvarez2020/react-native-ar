@@ -1,8 +1,10 @@
+import { isUndefined } from "lodash";
 import * as Yup from "yup";
 
-export function initialValues(data) {
+export function initialValues(data, patient) {
   const enfermedad_data = data?.enfermedad_data;
-  return {
+  const values = {
+    id_patient: patient?.id || "",
     fecha: data?.fecha || "",
     descripcion: data?.descripcion || "",
     foto: data?.foto || "",
@@ -11,10 +13,12 @@ export function initialValues(data) {
     type1: "",
     type2: "",
   };
+  return values;
 }
 
 export function addValidationSchema() {
   return Yup.object({
+    id_patient: Yup.string().required("El ID del paciente es obligatorio"),
     descripcion: Yup.string()
       .trim("La descripción no debe incluir espacios en blanco por demas")
       .strict(true)
@@ -32,6 +36,7 @@ export function addValidationSchema() {
 
 export function updateValidationSchema() {
   return Yup.object({
+    id_patient: Yup.string().required("El ID del paciente es obligatorio"),
     descripcion: Yup.string()
       .trim("La descripción no debe incluir espacios en blanco por demas")
       .strict(true)
@@ -44,16 +49,5 @@ export function updateValidationSchema() {
     type2: Yup.string().required("Debe seleccionar una opción"),
     enfermedad: Yup.string().required("Debe seleccionar una opción"),
     subtipo: Yup.string().required("Debe seleccionar una opción"),
-    // .test(
-    //   "Valor correcto",
-    //   "La imagen no es válida",
-    //   (val, optionsValue) => {
-    //     const file = optionsValue.options.originalValue;
-    //     if (file) {
-    //       return true;
-    //     }
-    //     return false;
-    //   }
-    // ),
   });
 }

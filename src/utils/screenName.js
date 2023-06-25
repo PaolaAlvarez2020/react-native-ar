@@ -7,7 +7,7 @@ const searchStack = {
 const accountStack = {
   tab: "AccountTab",
   drawer: "AccountDrawer",
-  title: "Cuenta",
+  title: "Inicio",
   home: "Home",
   login: "Login",
   register: "Register",
@@ -15,11 +15,12 @@ const accountStack = {
 
 const consultationStack = {
   drawer: "ConsultationDrawer",
-  myTitle: "Mis Consultas",
+  title: "Consultas",
   consult: "Consult",
   consultations: "Consultations",
   myConsultations: "myConsultations",
   myConsultation: "myConsultation",
+  addEditConsultation: "addEditConsultation",
 };
 
 const patientStack = {
@@ -27,6 +28,7 @@ const patientStack = {
   drawer: "PatientDrawer",
   title: "Pacientes",
   listPatients: "Lista de Pacientes",
+  patients: "Patients",
   patient: "Patient",
   addEditPatient: "addEditPatient",
   patientInfo: "patientInfo",

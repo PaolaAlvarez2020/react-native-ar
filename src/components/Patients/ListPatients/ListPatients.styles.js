@@ -1,9 +1,20 @@
 import { StyleSheet } from "react-native";
+import {
+  BLACK,
+  GRAY,
+  PRIMARY_DARK,
+  PRIMARY_EXTRA_LIGHT,
+} from "../../../styles/colors";
 
 export const styles = StyleSheet.create({
-  patient: {
+  mainContent: { flex: 1 },
+  itemList: {
     flexDirection: "row",
     margin: 10,
+    paddingBottom: 8,
+    marginHorizontal: 15,
+    borderBottomColor: PRIMARY_EXTRA_LIGHT,
+    borderBottomWidth: 2,
   },
   image: {
     width: 80,
@@ -11,11 +22,14 @@ export const styles = StyleSheet.create({
     marginRight: 15,
   },
   name: {
-    fontWeight: "bold",
+    fontSize: 14,
+    fontFamily: "Poppins-Bold",
+    color: BLACK,
   },
   info: {
-    color: "#828282",
-    paddingRight: 100,
+    fontSize: 10,
+    fontFamily: "Poppins-Regular",
+    color: GRAY,
     marginTop: 3,
   },
 });

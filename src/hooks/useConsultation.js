@@ -7,11 +7,14 @@ import {
   updateImageConsultationApi,
   searchConsultationsByUserApi,
   getConsultationsByUserApi,
+  searchConsultationsApi,
 } from "../api/";
 import { useAuth } from "./useAuth";
 
 export function useConsultation() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingConsultationSearch, setloadingConsultationSearch] =
+    useState(false);
   const [error, setError] = useState(false);
   const [consultations, setConsultations] = useState([]);
   const [consultation, setConsultation] = useState(undefined);
@@ -24,6 +27,7 @@ export function useConsultation() {
       setLoading(false);
 
       setConsultations(response);
+      return response;
     } catch (err) {
       setLoading(false);
       throw err;
@@ -52,6 +56,19 @@ export function useConsultation() {
       setConsultations(response);
     } catch (err) {
       setLoading(false);
+      throw err;
+    }
+  };
+  const searchConsultations = async (text, id) => {
+    try {
+      setloadingConsultationSearch(true);
+      const response = await searchConsultationsApi(text, id);
+      setloadingConsultationSearch(false);
+
+      setConsultations(response);
+      return response;
+    } catch (err) {
+      setloadingConsultationSearch(false);
       throw err;
     }
   };
@@ -112,11 +129,13 @@ export function useConsultation() {
     getConsultationsByPatient,
     updateImageConsultation,
     searchConsultationsByUser,
+    searchConsultations,
     getConsultationsByUser,
     addConsultation,
     loading,
     error,
     consultations,
     consultation,
+    loadingConsultationSearch,
   };
 }

@@ -1,26 +1,35 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { PRIMARY_DARK, PRIMARY_EXTRA_LIGHT, RED } from "../../../styles/colors";
 
 export const styles = StyleSheet.create({
   title: {
+    fontFamily: "Gilroy-ExtraBold",
     textAlign: "center",
     fontSize: 32,
-    fontWeight: "bold",
+    marginTop: 30,
   },
-  actions: {
-    flexDirection: "row",
+  mainContent: {
+    flex: 1,
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    width: Dimensions.get("window").width,
-    marginTop: 20,
-    marginBottom: 20,
-    marginHorizontal: 20,
+    margin: 20,
+  },
+  actions: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   addButton: {
-    backgroundColor: "#001E4C",
+    alignSelf: "center",
+    backgroundColor: PRIMARY_DARK,
     width: "80%",
   },
   cancelButton: {
-    backgroundColor: "#EB0100",
+    alignSelf: "center",
+    backgroundColor: RED,
     width: "80%",
   },
 });

@@ -11,6 +11,9 @@ import { LogBox, View, Text } from "react-native";
 import { toastConfig } from "./src/utils";
 import { FONT_NAMES } from "./src/styles/fonts";
 
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
 

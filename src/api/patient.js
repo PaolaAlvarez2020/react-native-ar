@@ -1,3 +1,4 @@
+import { isUndefined } from "lodash";
 import { ENV } from "../utils";
 
 export async function getPatientsApi() {
@@ -30,10 +31,12 @@ export async function getPatientApi(id) {
   }
 }
 
-export async function searchPatientsApi(text) {
+export async function searchPatientsApi(text, idUser) {
   try {
     const search = `search=${text}`;
-    const url = `${ENV.BASE_API}/${ENV.API_ROUTES.PATIENTS}/?${search}`;
+    const url = `${ENV.BASE_API}/${ENV.API_ROUTES.PATIENTS}/?${search}${
+      !isUndefined(idUser) ? `&usuario__id=${idUser}` : ""
+    }`;
     const params = {
       method: "GET",
     };

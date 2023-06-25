@@ -15,25 +15,26 @@ import {
 } from "./AddEditPatientScreen.data";
 import { styles } from "./AddEditPatientScreen.styles";
 import { usePerson, usePatient, useUser } from "../../../hooks/";
-import dayjs from "dayjs";
+import { isUndefined } from "lodash";
 
 export function AddEditPatientScreen(props) {
   const navigation = useNavigation();
   const { params } = props.route;
+  const { patient, reloadData, reloadDataSinglePatient } = params;
   const { addPerson, updateAvatarPerson, updatePerson } = usePerson();
   const { addPatient, updatePatient } = usePatient();
   const { addUser, updateUser } = useUser();
 
   const formik = useFormik({
-    initialValues: initialValues(params?.patient),
-    validationSchema: params?.patient
+    initialValues: initialValues(patient),
+    validationSchema: patient
       ? updateValidationSchema()
       : addValidationSchema(),
     validateOnChange: false,
     onSubmit: async (formValue) => {
       try {
         const fotoFinal = formValue?.foto;
-        if (!params?.patient) {
+        if (!patient) {
           // console.log("AGREGAR PACIENTE", params);
           // console.log(formValue);
           const responsePerson = await addPerson({ ...formValue, foto: null });
@@ -86,19 +87,19 @@ export function AddEditPatientScreen(props) {
           });
         } else {
           // console.log("ACTUALIZAR PACIENTE", params);
-          const idPerson = params?.patient?.usuario_data.persona_data.id;
-          const idUser = params?.patient?.usuario_data.id;
-          const idPatient = params?.patient?.id;
+          const idPerson = patient?.usuario_data.persona_data.id;
+          const idUser = patient?.usuario_data.id;
+          const idPatient = patient?.id;
           const responsePerson = await updatePerson(idPerson, formValue);
           if (
             fotoFinal &&
-            fotoFinal !== params?.patient?.usuario_data?.persona_data?.foto
+            fotoFinal !== patient?.usuario_data?.persona_data?.foto
           ) {
             await updateAvatarPerson(idPerson.id, responsePerson.ci, fotoFinal);
           }
           await updateUser(idUser, {
             ci: formValue.ci,
-            username: params?.patient?.usuario_data.username,
+            username: patient?.usuario_data.username,
             email: formValue.email,
             is_active: true,
             is_staff: false,
@@ -113,7 +114,8 @@ export function AddEditPatientScreen(props) {
             text1: "Paciente actualizado correctamente",
           });
         }
-
+        if (!isUndefined(reloadData)) reloadData();
+        if (!isUndefined(reloadDataSinglePatient)) reloadDataSinglePatient();
         navigation.goBack();
       } catch (error) {
         console.log("error", error);

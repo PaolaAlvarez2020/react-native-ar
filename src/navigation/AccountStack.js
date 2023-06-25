@@ -4,7 +4,17 @@ import {
   MyConsultationsScreen,
   MyConsultationScreen,
 } from "../screens/Account";
-import { ConsultScreen, ConsultationsScreen } from "../screens/Consultations";
+import {
+  ConsultScreen,
+  ConsultationInfoScreen,
+  ConsultationsScreen,
+} from "../screens/Consultations";
+import {
+  PatientsScreen,
+  PatientScreen,
+  AddEditPatientScreen,
+} from "../screens/Patients";
+import { SearchScreen } from "../screens/SearchScreen";
 import { screen } from "../utils";
 
 const Stack = createNativeStackNavigator();
@@ -26,12 +36,8 @@ export function AccountStack() {
         component={MyConsultationScreen}
       />
       <Stack.Screen
-        name={screen.consultation.consult}
-        component={ConsultScreen}
-      />
-      <Stack.Screen
-        name={screen.consultation.consultations}
-        component={ConsultationsScreen}
+        name={screen.patient.consultationInfo}
+        component={ConsultationInfoScreen}
       />
     </Stack.Navigator>
   );

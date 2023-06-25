@@ -36,14 +36,15 @@ export const ENV = {
 };
 
 export function calcularEdad(birthday) {
-  const currentDate = dayjs();
-  const years = dayjs(currentDate).diff(birthday, "years");
-  const monthBirthday = parseInt(dayjs(birthday).get("month")) + 1;
-  const monthCurrentDate = parseInt(dayjs(currentDate).get("month")) + 1;
-  const months = monthCurrentDate - monthBirthday;
+  const fechaActual = dayjs();
+  const _birthday = dayjs(birthday, "YYYY-MM-DD");
 
-  return `${years > 0 ? `${years} años  y` : ""} ${
-    months > 1 ? `${months} meses` : `${months} mes`
+  const diff = fechaActual.diff(_birthday, "month");
+  const years = Math.floor(diff / 12);
+  const months = diff % 12;
+
+  return `${years} años ${
+    months === 1 ? `y ${months} mes` : months > 0 ? `y ${months} meses` : ""
   }`;
 }
 
@@ -78,3 +79,48 @@ export const toastConfig = {
     </View>
   ),
 };
+
+export const HTML_AR = `<html>
+<head>
+  <title>Text alignment</title>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .description {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">¡Bienvenido!</h1>
+    <p class="description">Para agregar una imagen, primero selecciona el tipo de enfermedad. Luego, presiona la parte donde está el icono de cámara para que se agregue.</p>
+    <h1 class="title">Explora las opciones</h1>
+    <p class="description">Escoge alguna enfermedad y disfruta de la realidad aumentada.</p>
+  </div>
+</body>
+</html>
+
+`;

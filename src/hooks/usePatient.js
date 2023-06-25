@@ -10,10 +10,11 @@ import {
 import { useAuth } from "./useAuth";
 
 export function usePatient() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingPatientSearch, setLoadingPatientSearch] = useState(false);
   const [error, setError] = useState(false);
-  const [patients, setPatients] = useState(null);
-  const [patient, setPatient] = useState(null);
+  const [patients, setPatients] = useState([]);
+  const [patient, setPatient] = useState(undefined);
   const { auth } = useAuth();
 
   const getPatients = async () => {
@@ -37,21 +38,22 @@ export function usePatient() {
 
       setPatient(response);
     } catch (err) {
-      setError(err);
       setLoading(false);
+      throw err;
     }
   };
 
-  const searchPatients = async (text) => {
+  const searchPatients = async (text, idUser) => {
     try {
-      setLoading(true);
-      const response = await searchPatientsApi(text);
-      setLoading(false);
+      setLoadingPatientSearch(true);
+      const response = await searchPatientsApi(text, idUser);
+      setLoadingPatientSearch(false);
 
       setPatients(response);
+      return response;
     } catch (err) {
-      setLoading(false);
-      setError(err);
+      setLoadingPatientSearch(false);
+      throw err;
     }
   };
 
@@ -102,5 +104,6 @@ export function usePatient() {
     error,
     patient,
     patients,
+    loadingPatientSearch,
   };
 }

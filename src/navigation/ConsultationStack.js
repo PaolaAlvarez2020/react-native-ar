@@ -3,31 +3,38 @@ import {
   PatientsScreen,
   PatientInfoScreen,
   AddEditPatientScreen,
-  PatientScreen,
 } from "../screens/Patients";
 import {
   ConsultationInfoScreen,
   AddEditConsultationScreen,
+  ConsultationsScreen,
+  ConsultScreen,
 } from "../screens/Consultations";
 import { SearchScreen } from "../screens/SearchScreen";
 import { screen } from "../utils";
 
 const Stack = createNativeStackNavigator();
 
-export function PatientStack() {
+export function ConsultationStack() {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name={screen.patient.patients} component={PatientsScreen} />
-      <Stack.Screen name={screen.patient.patient} component={PatientScreen} />
-      <Stack.Screen name={screen.search.search} component={SearchScreen} />
       <Stack.Screen
-        name={screen.patient.addEditPatient}
-        component={AddEditPatientScreen}
+        name={screen.consultation.consultations}
+        component={ConsultationsScreen}
       />
+      <Stack.Screen
+        name={screen.consultation.consult}
+        component={ConsultScreen}
+      />
+      <Stack.Screen
+        name={screen.consultation.addEditConsultation}
+        component={AddEditConsultationScreen}
+      />
+      <Stack.Screen name={screen.search.search} component={SearchScreen} />
     </Stack.Navigator>
   );
 }

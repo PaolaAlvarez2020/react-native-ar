@@ -4,7 +4,7 @@ import { Button, Text } from "@rneui/themed";
 import { useFormik } from "formik";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-import { useDisease, useConsultation } from "../../../hooks";
+import { useDisease, useConsultation, usePatient } from "../../../hooks";
 import {
   InfoConsultationForm,
   UploadImagesAR,
@@ -15,18 +15,20 @@ import {
   initialValues,
 } from "./AddEditConsultationScreen.data";
 import { styles } from "./AddEditConsultationScreen.styles";
+import { isUndefined } from "lodash";
 
 export function AddEditConsultationScreen(props) {
   const navigation = useNavigation();
   const { params } = props.route;
+  const { consultation, patient } = params;
   const { addConsultation, updateImageConsultation } = useConsultation();
   const { addDisease } = useDisease();
 
   const formik = useFormik({
-    initialValues: initialValues(params?.consultation),
-    validationSchema: params?.consultation
-      ? updateValidationSchema()
-      : addValidationSchema(),
+    initialValues: initialValues(consultation, patient),
+    validationSchema: isUndefined(consultation)
+      ? addValidationSchema()
+      : updateValidationSchema(),
     validateOnChange: false,
     onSubmit: async (formValue) => {
       try {
@@ -41,7 +43,7 @@ export function AddEditConsultationScreen(props) {
           fecha: formValue.fecha,
           descripcion: formValue.descripcion,
           estado: true,
-          paciente: params.patient.id,
+          paciente: formValue.id_patient,
           enfermedad: responseDisease?.id,
         });
 
@@ -49,7 +51,6 @@ export function AddEditConsultationScreen(props) {
 
         navigation.goBack();
       } catch (error) {
-        console.log("error", error);
         Toast.show({
           type: "error",
           position: "bottom",
@@ -62,15 +63,15 @@ export function AddEditConsultationScreen(props) {
 
   return (
     <ScrollView overScrollMode="never">
-      <View>
-        <Text style={styles.title}>
-          {params?.consultation ? "ACTUALIZAR" : "AGREGAR"} CONSULTA
-        </Text>
-        <UploadImagesAR formik={formik} />
+      <Text style={styles.title}>
+        {isUndefined(consultation) ? "Agregar" : "actualizar"} consulta
+      </Text>
+      <UploadImagesAR formik={formik} patient={patient} />
+      <View style={styles.mainContent}>
         <InfoConsultationForm formik={formik} />
         <View style={styles.actions}>
           <Button
-            title={params?.consultation ? "Actualizar" : "Agregar"}
+            title={isUndefined(consultation) ? "Agregar" : "Actualizar"}
             buttonStyle={styles.addButton}
             onPress={formik.handleSubmit}
             loading={formik.isSubmitting}

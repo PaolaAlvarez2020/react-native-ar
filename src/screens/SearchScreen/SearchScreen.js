@@ -4,32 +4,61 @@ import { SearchBar, ListItem, Avatar, Icon, Text } from "@rneui/themed";
 import { size, map } from "lodash";
 import { useNavigation } from "@react-navigation/native";
 import { screen } from "../../utils";
-import { usePatient } from "../../hooks";
+import { useConsultation, usePatient } from "../../hooks";
+import { Loader } from "../../components/Common";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import dayjs from "dayjs";
 
 export function SearchScreen(props) {
   const { params } = props.route;
-  const { type } = params;
+  const { type, idUser } = params;
   const [searchText, setSearchText] = useState("");
-  const { patients, searchPatients } = usePatient();
+  const { searchPatients, loadingPatientSearch } = usePatient();
+  const { searchConsultations, loadingConsultationSearch } = useConsultation();
+  const [dataSearch, setDataSearch] = useState([]);
   const navigation = useNavigation();
-
-  // console.log(patients);
 
   useEffect(() => {
     (async () => {
-      await searchPatients(searchText);
+      if (type === "patient") {
+        await searchPatients(searchText, idUser)
+          .then((result) => {
+            setDataSearch(result);
+          })
+          .catch((err) => {
+            Toast.show({
+              type: "error",
+              position: "bottom",
+              text1: "Hubo un error al obtener la información de los pacientes",
+              text2: err?.message,
+            });
+          });
+      } else if (type === "consultation") {
+        await searchConsultations(searchText, idUser)
+          .then((result) => {
+            setDataSearch(result);
+          })
+          .catch((err) => {
+            Toast.show({
+              type: "error",
+              position: "bottom",
+              text1: "Hubo un error al obtener la información de los pacientes",
+              text2: err?.message,
+            });
+          });
+      } else {
+        setDataSearch([]);
+      }
     })();
   }, [searchText]);
 
-  const goToScreen = (patient, person) => {
+  const goToScreen = (patient) => {
     if (type === "patient") {
-      const namePerson = `${person.nombre} ${person.apellido_paterno} ${person.apellido_materno}`;
-      navigation.navigate(screen.patient.patientInfo, {
-        id: patient.id,
-        name: namePerson,
+      navigation.navigate(screen.patient.patient, {
+        patient,
       });
     } else if (type === "consultation") {
-      navigation.navigate(screen.patient.consultationInfo, {
+      navigation.navigate(screen.consultation.consult, {
         id: patient.id,
       });
     }
@@ -43,50 +72,68 @@ export function SearchScreen(props) {
         onChangeText={(text) => setSearchText(text)}
       />
 
-      {!patients && <Text>Cargando...</Text>}
-
-      <ScrollView>
-        {size(searchText) === 0 ? (
-          <View style={{ alignItems: "center", marginTop: 20 }}>
-            <Text>Puede buscar, por C.I. y por nombre del paciente</Text>
-          </View>
-        ) : size(patients) === 0 ? (
-          <View style={{ alignItems: "center", marginTop: 20 }}>
-            <Text>No se han encontrado resultados</Text>
-          </View>
+      {loadingPatientSearch ||
+        (loadingConsultationSearch ? (
+          <Loader />
         ) : (
-          map(patients, (item) => {
-            const data = item;
+          <ScrollView>
+            {size(searchText) === 0 ? (
+              <View style={{ alignItems: "center", marginTop: 20 }}>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>
+                  {type === "patient"
+                    ? "Puede buscar, por C.I. y por nombre del paciente"
+                    : type === "consultation"
+                    ? "Puede buscar por fecha de consulta, por C.I. y por nombre del paciente"
+                    : ""}
+                </Text>
+              </View>
+            ) : size(dataSearch) === 0 ? (
+              <View style={{ alignItems: "center", marginTop: 20 }}>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>
+                  No se han encontrado resultados
+                </Text>
+              </View>
+            ) : (
+              map(dataSearch, (item) => {
+                const data = item;
+                const person =
+                  type === "consultation"
+                    ? data.paciente_data.usuario_data.persona_data
+                    : data.usuario_data.persona_data;
 
-            const person = data.usuario_data.persona_data;
-
-            return (
-              <ListItem
-                key={data.id}
-                bottomDivider
-                onPress={() => goToScreen(data, person)}
-              >
-                <Avatar
-                  source={
-                    person?.foto
-                      ? { uri: person.foto }
-                      : require("../../../assets/img/default-paciente.png")
-                  }
-                  rounded
-                />
-                <ListItem.Content>
-                  <ListItem.Title>
-                    {person?.nombre} {person?.apellido_paterno}{" "}
-                    {person?.apellido_materno}
-                  </ListItem.Title>
-                  <ListItem.Subtitle>{person?.ci}</ListItem.Subtitle>
-                </ListItem.Content>
-                <Icon type="material-community" name="chevron-right" />
-              </ListItem>
-            );
-          })
-        )}
-      </ScrollView>
+                return (
+                  <ListItem
+                    key={data.id}
+                    bottomDivider
+                    onPress={() => goToScreen(data)}
+                  >
+                    <Avatar
+                      source={
+                        person?.foto
+                          ? { uri: person.foto }
+                          : require("../../../assets/img/default-paciente.png")
+                      }
+                      rounded
+                    />
+                    <ListItem.Content>
+                      <ListItem.Title>
+                        {person?.nombre} {person?.apellido_paterno}{" "}
+                        {person?.apellido_materno}
+                      </ListItem.Title>
+                      <ListItem.Subtitle>{person?.ci}</ListItem.Subtitle>
+                      {type === "consultation" && (
+                        <ListItem.Subtitle>
+                          {dayjs(data?.fecha).format("DD/MM/YYYY")}
+                        </ListItem.Subtitle>
+                      )}
+                    </ListItem.Content>
+                    <Icon type="material-community" name="chevron-right" />
+                  </ListItem>
+                );
+              })
+            )}
+          </ScrollView>
+        ))}
     </>
   );
 }
